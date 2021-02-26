@@ -39,9 +39,28 @@ class Products with ChangeNotifier {
     ),
   ];
 
+  // var _showFavoritesOnly = false;
+
   List<Product> get items {
+    // if (_showFavoritesOnly)
+    //   return [..._items.where((element) => element.isFavorite).toList()];
     return [..._items];
   }
+
+  List<Product> get favoriteItems {
+    return [..._items.where((element) => element.isFavorite).toList()];
+  }
+
+//THIS CAUSES FILTER TO BE APPLIED GLOBALLY IN THE WHOLE APP
+  // void showFavoritesOnly() {
+  //   _showFavoritesOnly = true;
+  //   notifyListeners();
+  // }
+
+  // void showAll() {
+  //   _showFavoritesOnly = false;
+  //   notifyListeners();
+  // }
 
   void addProduct(Product product) {
     _items.add(product);
