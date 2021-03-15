@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:shopping/models/http_exception.dart';
 import 'product.dart';
 
 class Products with ChangeNotifier {
@@ -135,9 +136,20 @@ class Products with ChangeNotifier {
     }
   }
 
-  void deleteProduct(String id) {
-    _items.removeWhere((element) => element.id == id);
+  void deleteProduct(String id) async {
+    final url = Uri.https('shopping-flutter-1c30f-default-rtdb.firebaseio.com',
+        '/products/$id.json');
+    final existingProdIndex = _items.indexWhere((element) => element.id == id);
+    var existingProd = _items[existingProdIndex];
+    final response = await http.delete(url);
+    _items.removeAt(existingProdIndex);
     notifyListeners();
+    if (response.statusCode >= 400) {
+      _items.insert(existingProdIndex, existingProd);
+      notifyListeners();
+      throw HttpException('Could not delete product');
+    }
+    existingProd = null;
   }
 
   Product findById(String id) =>
