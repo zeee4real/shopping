@@ -44,7 +44,7 @@ class Orders with ChangeNotifier {
                   price: e['price']))
               .toList()));
     });
-    _orders = loadedOrders.reversed;
+    _orders = loadedOrders;
     notifyListeners();
   }
 
