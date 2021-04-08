@@ -66,9 +66,13 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
+  final String token;
+  Products(this.token, this._items);
+
   Future<void> fetchAndSetProducts() async {
-    final url = Uri.https(
-        'shopping-flutter-1c30f-default-rtdb.firebaseio.com', '/products.json');
+    var queryParameters = {'auth': token};
+    final url = Uri.https('shopping-flutter-1c30f-default-rtdb.firebaseio.com',
+        '/products.json', queryParameters);
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
